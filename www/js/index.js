@@ -32,18 +32,43 @@ function onDeviceReady() {
 
 function init() {
     $("#addTask").click(addTask);
+    addFromStorage();
+
+ 
+}
+
+function addFromStorage(){
+    var list = JSON.parse(localStorage.getItem("data"));
+    for (let index = 0; index < list.length; index++) {
+        var delButton = $('<button id="delete">x</button>');
+        delButton.click(deleteLi);
+        delButton.css('float','right')
+        var newElem = $("<li>"+list[index]+'</li>');
+        newElem.append(delButton);
+        $("ul").append(newElem);
+        $("ul").listview("refresh");
+    }
 }
 
 function addTask() {
+    var data = JSON.parse(localStorage.getItem("data"));
+
     let question = prompt("Task name:");
     var delButton = $('<button id="delete">x</button>');
     delButton.click(deleteLi);
     delButton.css('float','right')
-    //$("#delete").click(al);
     var newElem = $("<li>"+question+'</li>');
     newElem.append(delButton);
+
+    data.push(question);
+    localStorage.setItem("data", JSON.stringify(data));
+    
     $("ul").append(newElem);
     $("ul").listview("refresh");
+}
+
+function edit() {
+    
 }
 
 function deleteLi(e) {
