@@ -43,7 +43,7 @@ function addFromStorage(){
         var delButton = $('<button id="delete">x</button>');
         delButton.click(deleteLi);
         delButton.css('float','right')
-        var newElem = $("<li>"+list[index]+'</li>');
+        var newElem = $('<li id="'+index+'">'+list[index]+'</li>');
         newElem.append(delButton);
         $("ul").append(newElem);
         $("ul").listview("refresh");
@@ -57,7 +57,7 @@ function addTask() {
     var delButton = $('<button id="delete">x</button>');
     delButton.click(deleteLi);
     delButton.css('float','right')
-    var newElem = $("<li>"+question+'</li>');
+    var newElem = $('<li id="'+data.length+'">'+question+'</li>');
     newElem.append(delButton);
 
     data.push(question);
@@ -73,6 +73,10 @@ function edit() {
 
 function deleteLi(e) {
     var caller = e.target || e.srcElement;
-    $(caller).parent().remove();
-    $("ul").listview("refresh");
+    var id = $(caller).parent().attr("id");
+    var data = JSON.parse(localStorage.getItem("data"));
+
+    data.splice(id, 1);
+    localStorage.setItem("data", JSON.stringify(data));
+    location.reload();
 }
