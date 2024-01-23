@@ -45,6 +45,11 @@ function addFromStorage(){
         delButton.css('float','right')
         var newElem = $('<li id="'+index+'">'+list[index]+'</li>');
         newElem.append(delButton);
+
+        var editTask = $('<button id="edit">edit</button>');
+        editTask.click(edit);
+        editTask.css('float', 'right');
+        newElem.append(editTask);
         $("ul").append(newElem);
         $("ul").listview("refresh");
     }
@@ -54,10 +59,14 @@ function addTask() {
     var data = JSON.parse(localStorage.getItem("data"));
 
     let question = prompt("Task name:");
+    var editTask = $('<button id="edit">edit</button>');
     var delButton = $('<button id="delete">x</button>');
+    editTask.click(edit);
+    editTask.css('float', 'right');
     delButton.click(deleteLi);
-    delButton.css('float','right')
+    delButton.css('float','right');
     var newElem = $('<li id="'+data.length+'">'+question+'</li>');
+    newElem.append(editTask);
     newElem.append(delButton);
 
     data.push(question);
@@ -67,8 +76,27 @@ function addTask() {
     $("ul").listview("refresh");
 }
 
-function edit() {
-    
+function edit(e) {
+    var caller = e.target || e.srcElement;
+    var id = $(caller).parent().attr("id");
+    var data = JSON.parse(localStorage.getItem("data"));
+
+    var nuevoTextField = $("<input>").attr("type", "text");
+    var nuevoBoton = $("<button>").text("Save");
+    var dontSaveButton = $("<button>").text("X");
+    nuevoBoton.click(function() {
+        data[id] = nuevoTextField.val();
+        localStorage.setItem("data", JSON.stringify(data));
+        location.reload();
+    });
+
+    dontSaveButton.click(function() {
+        location.reload();
+    })
+
+    $(caller).parent().empty().append(nuevoTextField, nuevoBoton, dontSaveButton);
+
+
 }
 
 function deleteLi(e) {
