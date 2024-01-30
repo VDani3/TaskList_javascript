@@ -31,14 +31,21 @@ function onDeviceReady() {
 }
 
 function init() {
+    var list = JSON.parse(localStorage.getItem("data"));
+
+    if (list === null) {
+        localStorage.setItem("data", "[]");
+    }
+
     $("#addTask").click(addTask);
     addFromStorage();
-
  
 }
 
 function addFromStorage(){
+
     var list = JSON.parse(localStorage.getItem("data"));
+
     for (let index = 0; index < list.length; index++) {
         var delButton = $('<button id="delete">x</button>');
         delButton.click(deleteLi);
@@ -66,8 +73,8 @@ function addTask() {
     delButton.click(deleteLi);
     delButton.css('float','right');
     var newElem = $('<li id="'+data.length+'">'+question+'</li>');
-    newElem.append(editTask);
     newElem.append(delButton);
+    newElem.append(editTask);
 
     data.push(question);
     localStorage.setItem("data", JSON.stringify(data));
